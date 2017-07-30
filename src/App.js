@@ -1,18 +1,80 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Card, Col, Row, Input, Button } from 'react-materialize';
 
-class App extends Component {
+const TodoCard = (props) => {
+  return (
+    <Col s={4} className='grid-example'>
+      <Card className='blue-grey darken-1' textClassName='white-text' title={props.taskName}>
+        {props.taskDescription}
+      </Card>
+    </Col>
+  );
+};
+
+const CardList = (props) => {
+  return (
+    <Row>
+      {props.cards.map(card => <TodoCard {...card} />)}
+    </Row>
+  );
+}
+
+class Form extends React.Component {
+  state = {
+    taskName: '',
+    taskDescription: ''
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.setState({
+      taskName: '',
+      taskDescription: ''
+    });
+    this.props.onSubmit(this.state);
+  }
+
+  handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <form onSubmit={this.handleSubmit}>
+        <Input name="taskName" s={12} label="Task Name" onChange={this.handleInputChange} value={this.state.taskName}/>
+        <Input name="taskDescription" s={12} label="Description"onChange={this.handleInputChange} value={this.state.taskDescription}/>
+        <div className="center">
+          <Button type='submit' floating large className='light' waves='teal' icon='add' />
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      </form>
+    );
+  }
+}
+
+class App extends Component {
+  state = {
+    todoItems: [      
+    ]
+  };
+
+  addNewTodo = (todo) => {
+    this.setState(prevState => ({
+      todoItems: prevState.todoItems.concat(todo)
+    }));
+  };
+
+  render() {
+    return (
+      <div className="container">
+        <Form onSubmit={this.addNewTodo} />
+        <CardList cards={this.state.todoItems} />
       </div>
     );
   }
