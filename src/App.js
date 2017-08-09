@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Card, Col, Row, Input, Button } from 'react-materialize';
+import { CSSTransitionGroup } from 'react-transition-group'
 
 const TodoCard = (props) => {
   return (
-    <Col s={4} className='grid-example'>
+    <Col s={4} className='grid-example' key={props.taskName}>
       <Card className='blue-grey darken-1' textClassName='white-text' title={props.taskName}>
         {props.taskDescription}
       </Card>
@@ -15,7 +16,12 @@ const TodoCard = (props) => {
 const CardList = (props) => {
   return (
     <Row>
-      {props.cards.map(card => <TodoCard {...card} />)}
+      <CSSTransitionGroup
+        transitionName="example"
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={300}>
+        {props.cards.map(card => <TodoCard {...card} />)}
+      </CSSTransitionGroup>
     </Row>
   );
 }
