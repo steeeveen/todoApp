@@ -54,8 +54,8 @@ class Form extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input name="taskName" s={12} label="Task Name" onChange={this.handleInputChange} value={this.state.taskName}/>
-        <Input name="taskDescription" s={12} label="Description"onChange={this.handleInputChange} value={this.state.taskDescription}/>
+        <Input name="taskName" s={12} label="Task Name" onChange={this.handleInputChange} value={this.state.taskName} />
+        <Input name="taskDescription" s={12} label="Description" onChange={this.handleInputChange} value={this.state.taskDescription} />
         <div className="center">
           <Button type='submit' floating large className='light' waves='teal' icon='add' />
         </div>
@@ -66,14 +66,16 @@ class Form extends React.Component {
 
 class App extends Component {
   state = {
-    todoItems: [      
+    todoItems: [
     ]
   };
 
   addNewTodo = (todo) => {
-    this.setState(prevState => ({
-      todoItems: prevState.todoItems.concat(todo)
-    }));
+    if (todo.taskName.length > 0) {
+      this.setState(prevState => ({
+        todoItems: prevState.todoItems.concat(todo)
+      }));
+    }
   };
 
   render() {
